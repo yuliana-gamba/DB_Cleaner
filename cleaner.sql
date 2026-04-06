@@ -927,3 +927,71 @@ INSERT INTO pago VALUES (28,'PayPal','ak-std-000022','2009-01-13',8489);
 INSERT INTO pago VALUES (30,'PayPal','ak-std-000024','2009-01-16',7863);
 INSERT INTO pago VALUES (35,'PayPal','ak-std-000025','2007-10-06',3321);
 INSERT INTO pago VALUES (38,'PayPal','ak-std-000026','2006-05-26',1171);
+
+
+
+/* SENTENCIAS DML PARA PRÁCTICAR SIN MORIR EN EL INTENTO */
+/* EJEMPLO PARA CONOCER LAS COLUMNAS DE UNA TABLA*/
+DESCRIBE EMPLEADO;
+
+SELECT codigo_empleado, nombre, apellido1, apellido2,
+extension, email, codigo_oficina, codigo_jefe
+puesto FROM EMPLEADO;
+
+/* RETO 1 - Retorna un listado con el código de oficina y 
+la ciudad donde hay oficinas */
+
+describe oficina;
+
+select o.codigo_oficina as cod_oficina, o.ciudad country,
+concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
+ from oficina o;
+ 
+ /* RETO 2 - Retorna un listado con la ciudad y 
+ el telefono de las oficinas en España. */
+ 
+ select ciudad, telefono, pais from oficina
+ where upper(pais) = 'ESPAÑA';
+ 
+ /* RETO 3 - Retorna el listado con todos los clientes que sean
+ de la ciudad de Madrid y cuyo representante de ventas tenga 
+ el código de empleado 11 ó 30. */
+ 
+ describe cliente;
+ describe empleado;
+ 
+ select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
+ from cliente cl 
+ join empleado em 
+ on em.codigo_empleado = cl.codigo_empleado_rep_ventas
+ where upper(cl.ciudad) = 'MADRID'
+ and (em.codigo_empleado = 11 
+ OR em.codigo_empleado = 30);
+ 
+  select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
+ from cliente cl 
+ join empleado em 
+ on em.codigo_empleado = cl.codigo_empleado_rep_ventas
+ where upper(cl.ciudad) = 'MADRID'
+ and em.codigo_empleado in (11,30); 
+ 
+select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
+ from cliente cl,  empleado em 
+ where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+ and upper(cl.ciudad) = 'MADRID'
+ and em.codigo_empleado in (11,30); 
+ 
+ select em.codigo_empleado, count(*) total_registros /*cl.ciudad, em.codigo_empleado */
+ from cliente cl,  empleado em 
+ where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+ and upper(cl.ciudad) = 'MADRID'
+ and em.codigo_empleado in (11,30)
+ group by em.codigo_empleado; 
+
+ select cl.ciudad, count(*) total_registros /*cl.ciudad, em.codigo_empleado */
+ from cliente cl,  empleado em 
+ where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+ and em.codigo_empleado in (11,30)
+ group by cl.ciudad
+ order by cl.ciudad desc; 
+
