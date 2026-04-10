@@ -10,7 +10,7 @@ CREATE TABLE oficina (
   codigo_postal VARCHAR(10) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
   linea_direccion1 VARCHAR(50) NOT NULL,
-  linea_direccion2 VARCHAR(50) DEFAULT NULL,
+  linea_direccion2 VARCHAR(50) DEFAULT 'NO TIENE',
   PRIMARY KEY (codigo_oficina)
 );
 
@@ -38,7 +38,7 @@ CREATE TABLE gama_producto (
 );
 
 CREATE TABLE cliente (
-  codigo_cliente INTEGER NOT NULL,
+  codigo_cliente INTEGER AUTO_INCREMENT NOT NULL,
   nombre_cliente VARCHAR(50) NOT NULL,
   nombre_contacto VARCHAR(30) DEFAULT NULL,
   apellido_contacto VARCHAR(30) DEFAULT NULL,
@@ -54,7 +54,10 @@ CREATE TABLE cliente (
   limite_credito NUMERIC(15,2) DEFAULT NULL,
   PRIMARY KEY (codigo_cliente),
   FOREIGN KEY (codigo_empleado_rep_ventas) REFERENCES empleado (codigo_empleado)
-);
+) AUTO_INCREMENT = 10;
+
+
+
 
 CREATE TABLE pedido (
   codigo_pedido INTEGER NOT NULL,
@@ -938,24 +941,32 @@ SELECT codigo_empleado, nombre, apellido1, apellido2,
 extension, email, codigo_oficina, codigo_jefe
 puesto FROM EMPLEADO;
 
-/* RETO 1 - Retorna un listado con el código de oficina y 
-la ciudad donde hay oficinas */
-
+/* RETO A - Retorna un listado con el código de oficina y la ciudad donde hay oficinas. */
+show tables;
 describe oficina;
+select codigo_oficina,ciudad,pais,region,codigo_postal,telefono,linea_direccion1,linea_direccion2 from oficina;
+select codigo_oficina,ciudad from oficina;
 
 select o.codigo_oficina as cod_oficina, o.ciudad country,
 concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  from oficina o;
  
- /* RETO 2 - Retorna un listado con la ciudad y 
- el telefono de las oficinas en España. */
+ /* RETO B -  Retorna un listado con la ciudad y el teléfono de las oficinas de España. */
+ show tables;
+ describe oficina;
+ select codigo_oficina,ciudad,pais,region,codigo_postal,telefono,linea_direccion1,linea_direccion2 from oficina;
+ select ciudad, telefono from oficina where pais = 'España';
  
  select ciudad, telefono, pais from oficina
  where upper(pais) = 'ESPAÑA';
  
- /* RETO 3 - Retorna el listado con todos los clientes que sean
- de la ciudad de Madrid y cuyo representante de ventas tenga 
- el código de empleado 11 ó 30. */
+ /* RETO C -Retorna un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.*/
+ 
+ show tables;
+ describe empleado;
+ select codigo_empleado,nombre,apellido1,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto from empleado;
+ select nombre, apellido1, apellido2, email from empleado where codigo_jefe = 7;
+  
  
  describe cliente;
  describe empleado;
@@ -994,4 +1005,40 @@ select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
  and em.codigo_empleado in (11,30)
  group by cl.ciudad
  order by cl.ciudad desc; 
+ 
+ /* RETO D- Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.*/
+ 
+ show tables;
+ describe empleado;
+ select codigo_empleado,nombre,apellido1,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto from empleado;
+ select nombre, apellido1, apellido2, email from empleado where codigo_jefe is null;
+ 
+ /* RETO C- RRetorna un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.*/
+ 
+ show tables;
+ describe empleado;
+ select codigo_empleado,nombre,apellido1,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto from empleado;
+ select nombre,apellido1, apellido2, puesto from empleado where puesto <> 'Representante ventas';
+ 
+ /* RETO E-Retorna un listado con el nombre de los todos los clientes españoles. */
+ 
+ show tables;
+ describe cliente;
+ select codigo_cliente,nombre_cliente,nombre_contacto,apellido_contacto,telefono,fax,linea_direccion1,linea_direccion2,ciudad,region,pais,codigo_postal,codigo_empleado_rep_ventas,limite_credito from cliente;
+ select nombre_cliente from cliente where pais = 'Spain';
+ 
+ 
+ /* RETO F-Retorna un listado con los distintos estados por los que puede pasar un pedido. */
+ show tables;
+ describe pedido;
+ select codigo_pedido,fecha_pedido,fecha_esperada,fecha_entrega,estado,comentarios,codigo_cliente from pedido;
+ select DISTINCT estado from pedido;
+ 
 
+ /* RETO G-Genera un listado con el código de cliente de aquellos clientes que realizaron algún pago en 2008. Tenga en cuenta que deberá eliminar aquellos códigos de cliente que aparezcan repetidos. Resuelva la consulta:
+
+Utilizando la función YEAR de MySQL.
+Utilizando la función DATE_FORMAT de MySQL. *Sin utilizar ninguna de las funciones anteriores. */ 
+ 
+ show tables;
+ describe 
