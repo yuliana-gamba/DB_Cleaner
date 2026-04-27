@@ -946,6 +946,7 @@ show tables;
 describe oficina;
 select codigo_oficina,ciudad,pais,region,codigo_postal,telefono,linea_direccion1,linea_direccion2 from oficina;
 select codigo_oficina,ciudad from oficina;
+
 select o.codigo_oficina as cod_oficina, o.ciudad country,
 concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  from oficina o;
@@ -966,7 +967,6 @@ concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  select codigo_empleado,nombre,apellido1,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto from empleado;
  select nombre, apellido1, apellido2, email from empleado where codigo_jefe = 7;
   
- 
  
  
  /* RETO D- Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.*/
@@ -1044,6 +1044,7 @@ select * from pedido;
 select * from pedido;
 show tables;
 describe pedido;
+
 select codigo_pedido, codigo_cliente, fecha_pedido, fecha_entrega, estado
 from pedido
 where estado = 'Entregado' 
@@ -1053,6 +1054,7 @@ where estado = 'Entregado'
 select * from pago;
 show tables;
 describe pago;
+
 select codigo_cliente, forma_pago, id_transaccion, fecha_pago, total
 from pago
 where forma_pago = 'PayPal' 
@@ -1062,11 +1064,10 @@ order by total desc;
 /*RETO M: Genera un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.*/
 show tables;
 describe pago;
+
 select codigo_cliente, forma_pago, id_transaccion
 fecha_pago, total
 from pago;
-
-/*Usa DISTINCT justo después de SELECT para eliminar filas duplicadas y obtener valores únicos, afectando a todas las columnas mencionadas en la consulta.*/
 select distinct forma_pago
 from pago;
 
@@ -1076,9 +1077,6 @@ from pago;
 show tables;
 describe producto;
 
-select codigo_producto, nombre, gama, dimensiones, proveedor, descripcion
-cantidad_en_stock, precio_venta, precio_proveedor
-from producto;
 select nombre, gama, precio_venta
 from producto 
 where gama = 'Ornamentales' and cantidad_en_stock > 100
@@ -1088,11 +1086,11 @@ order by precio_venta desc;
 show tables;
 describe cliente;
 
-select codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto
-telefono,fax, linea_direccion1, linea_direccion2, ciudad, region, pais
-codigo_postal, codigo_empleado_rep_ventas, limite_credito
-from cliente;
 select nombre_cliente, ciudad, codigo_empleado_rep_ventas
 from cliente
 where ciudad = 'Madrid' 
-  and codigo_empleado_rep_ventas IN (11, 30);
+  and (codigo_empleado_rep_ventas = 11 or codigo_empleado_rep_ventas = 30);
+
+
+
+
