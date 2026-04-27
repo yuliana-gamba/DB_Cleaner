@@ -968,43 +968,7 @@ concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
  select nombre, apellido1, apellido2, email from empleado where codigo_jefe = 7;
   
  
- describe cliente;
- describe empleado;
  
- select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
- from cliente cl 
- join empleado em 
- on em.codigo_empleado = cl.codigo_empleado_rep_ventas
- where upper(cl.ciudad) = 'MADRID'
- and (em.codigo_empleado = 11 
- OR em.codigo_empleado = 30);
- 
-  select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
- from cliente cl 
- join empleado em 
- on em.codigo_empleado = cl.codigo_empleado_rep_ventas
- where upper(cl.ciudad) = 'MADRID'
- and em.codigo_empleado in (11,30); 
- 
-select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
- from cliente cl,  empleado em 
- where em.codigo_empleado = cl.codigo_empleado_rep_ventas
- and upper(cl.ciudad) = 'MADRID'
- and em.codigo_empleado in (11,30); 
- 
- select em.codigo_empleado, count(*) total_registros /*cl.ciudad, em.codigo_empleado */
- from cliente cl,  empleado em 
- where em.codigo_empleado = cl.codigo_empleado_rep_ventas
- and upper(cl.ciudad) = 'MADRID'
- and em.codigo_empleado in (11,30)
- group by em.codigo_empleado; 
-
- select cl.ciudad, count(*) total_registros /*cl.ciudad, em.codigo_empleado */
- from cliente cl,  empleado em 
- where em.codigo_empleado = cl.codigo_empleado_rep_ventas
- and em.codigo_empleado in (11,30)
- group by cl.ciudad
- order by cl.ciudad desc; 
  
  /* RETO D- Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.*/
  
