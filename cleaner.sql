@@ -1040,5 +1040,102 @@ select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
 Utilizando la función YEAR de MySQL.
 Utilizando la función DATE_FORMAT de MySQL. *Sin utilizar ninguna de las funciones anteriores. */ 
  
- show tables;
- describe 
+show tables;
+  describe pago;
+  select distinct codigo_cliente /*eliminar datos duplicados de 2008*/
+  from pago
+  where year (fecha_pago) = 2008; /*EXTRAE LOS DATOS SOLO DEL 2008, PREFERI USAR ESTA FUNCION POR QUE LA ENTENDI MEJOR*/
+  
+/*RETO H. Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos que no han sido entregados a tiempo.*/
+
+  select * from pedido;
+  show tables;
+  describe pedido;
+  select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+  from pedido
+  where fecha_entrega > fecha_esperada; /* SE USA EL > PARA BUSCAR EN EL MYSQL SI LA FECHA DE ENTREGA SE PASO DE LA FECHA ESPERADA*/
+  
+
+/*RETO I: Genera un listado con el código de pedido, código de cliente, fecha esperada y fecha de entrega de los pedidos cuya fecha de entrega ha sido al menos dos días antes de la fecha esperada.
+Utilizando la función ADDDATE de MySQL.
+Utilizando la función DATEDIFF de MySQL.
+¿Sería posible resolver esta consulta utilizando el operador de suma + o resta -? */
+ 
+   select * from pedido;
+  show tables;
+  describe pedido;
+  select codigo_pedido, codigo_cliente, fecha_esperada, fecha_entrega
+  from pedido
+  where (fecha_esperada - fecha_entrega) >= 2; /* LO HICE SIN FUNCION ME PARECE MAS FACIL ASI AUNQUE PREFERIBLEMENTE CREO QUE ES MEJOR USAR LA FUNCION*/
+  
+/*RETO J: Genera un listado de todos los pedidos que fueron rechazados en 2009.*/
+
+select * from pedido;
+  show tables;
+  describe pedido;
+  select estado
+  from pedido
+  where estado = 'Rechazado' and year(fecha_pedido) = 2009; /* EL AND ES UNA COMPUERTA LOGICA QUE AÑADE PUES OTRA CONDICION EN ESTE CASO EL AÑO*/
+  
+/*RETO K: Genera un listado de todos los pedidos que han sido entregados en el mes de enero de cualquier año.*/
+select * from pedido;
+show tables;
+describe pedido;
+
+select codigo_pedido, codigo_cliente, fecha_pedido, fecha_entrega, estado
+from pedido
+where estado = 'Entregado' 
+  and month(fecha_entrega) = 1;
+
+/*RETO L: Genera un listado con todos los pagos que se realizaron en el año 2008 mediante Paypal. Ordene el resultado de mayor a menor.*/
+select * from pago;
+show tables;
+describe pago;
+
+select codigo_cliente, forma_pago, id_transaccion, fecha_pago, total
+from pago
+where forma_pago = 'PayPal' 
+  and year(fecha_pago) = 2008
+order by total desc;
+
+/*RETO M: Genera un listado con todas las formas de pago que aparecen en la tabla pago. Tenga en cuenta que no deben aparecer formas de pago repetidas.*/
+show tables;
+describe pago;
+
+select codigo_cliente, forma_pago, id_transaccion
+fecha_pago, total
+from pago;
+
+/*Usa DISTINCT justo después de SELECT para eliminar filas duplicadas y obtener valores únicos, afectando a todas las columnas mencionadas en la consulta.*/
+select distinct forma_pago
+from pago;
+
+
+/*RETO N: Genera un listado con todos los productos que pertenecen a la gama Ornamentales y que tienen más de 100 unidades en stock.
+ El listado deberá estar ordenado por su precio de venta, mostrando en primer lugar los de mayor precio.*/
+show tables;
+describe producto;
+
+select codigo_producto, nombre, gama, dimensiones, proveedor, descripcion
+cantidad_en_stock, precio_venta, precio_proveedor
+from producto;
+
+select nombre, gama, precio_venta
+from producto 
+where gama = 'Ornamentales' and cantidad_en_stock > 100
+order by precio_venta desc;
+
+/*RETO O: Genera un listado con todos los clientes que sean de la ciudad de Madrid y cuyo representante de ventas tenga el código de empleado 11 o 30.*/
+show tables;
+describe cliente;
+
+
+select codigo_cliente, nombre_cliente, nombre_contacto, apellido_contacto
+telefono,fax, linea_direccion1, linea_direccion2, ciudad, region, pais
+codigo_postal, codigo_empleado_rep_ventas, limite_credito
+from cliente;
+
+select nombre_cliente, ciudad, codigo_empleado_rep_ventas
+from cliente
+where ciudad = 'Madrid' 
+  and codigo_empleado_rep_ventas IN (11, 30);
